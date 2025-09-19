@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toko Online Saya</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f9fc;
+        }
+        .product-card {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+        .modal {
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+            transform: translateY(-20px);
+        }
+        .modal.open {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Modal Pesan Sukses -->
+    <div id="success-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 opacity-0 pointer-events-none">
+        <div class="modal bg-white rounded-xl p-8 shadow-2xl max-w-sm w-full mx-4">
+            <h2 class="text-2xl font-bold text-gray-900 mb-4 text-center">Berhasil!</h2>
+            <p id="modal-text" class="text-gray-700 text-center mb-6">Produk telah ditambahkan ke keranjang.</p>
+            <div class="flex justify-center">
+                <button onclick="closeModal()" class="bg-gray-800 text-white font-semibold py-3 px-6 rounded-lg hover:bg-gray-700 transition duration-300 shadow-md">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="bg-white shadow-sm p-4 sticky top-0 z-40">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold text-gray-900">TokoKita.id</a>
+            <nav class="hidden md:flex space-x-6">
+                <a href="#" class="text-gray-600 hover:text-gray-900 transition-colors duration-200 font-medium">Beranda</a>
+                <a href="#" class="text-gray-600 hover:text-gray-900 transition-colors duration-200 font-medium">Produk</a>
+                <a href="#" class="text-gray-600 hover:text-gray-900 transition-colors duration-200 font-medium">Tentang Kami</a>
+                <a href="#" class="text-gray-600 hover:text-gray-900 transition-colors duration-200 font-medium">Kontak</a>
+            </nav>
+            <div class="flex items-center space-x-4">
+                <button class="bg-gray-800 text-white p-2 rounded-full hover:bg-gray-700 transition-colors duration-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5H19l-4 8H7zm-2 0a2 2 0 100 4 2 2 0 000-4zM17 17a2 2 0 100 4 2 2 0 000-4z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <main class="container mx-auto p-6 md:p-8">
+        <section class="bg-gray-900 text-white rounded-3xl p-8 md:p-16 mb-12 flex flex-col md:flex-row items-center justify-between">
+            <div class="max-w-xl text-center md:text-left mb-6 md:mb-0">
+                <h1 class="text-4xl md:text-5xl font-extrabold leading-tight mb-4">Temukan Koleksi Terbaru Kami</h1>
+                <p class="text-lg text-gray-300 mb-6">Produk berkualitas tinggi yang dirancang untuk Anda. Belanja sekarang dan nikmati pengalaman terbaik.</p>
+                <a href="#products" class="bg-white text-gray-900 font-bold py-3 px-8 rounded-full hover:bg-gray-200 transition duration-300 shadow-lg">Belanja Sekarang</a>
+            </div>
+            <img src="https://placehold.co/400x300/e2e8f0/4a5568?text=Produk+Unggulan" alt="Produk Unggulan" class="rounded-2xl shadow-xl w-full max-w-sm">
+        </section>
+
+        <!-- Product Grid Section -->
+        <section id="products">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-10">Produk Terlaris</h2>
+            <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                <!-- Product cards will be inserted here by JavaScript -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white p-8">
+        <div class="container mx-auto text-center">
+            <p>&copy; 2024 TokoKita.id. Hak Cipta Dilindungi.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Array of product data
+        const products = [
+            {
+                id: 1,
+                name: "Tas Ransel Modern",
+                price: "Rp 350.000",
+                image: "https://placehold.co/400x400/1e293b/cbd5e1?text=Tas+Ransel",
+                description: "Tas ransel minimalis dengan desain elegan dan bahan berkualitas tinggi."
+            },
+            {
+                id: 2,
+                name: "Sepatu Lari Ultra",
+                price: "Rp 850.000",
+                image: "https://placehold.co/400x400/0f172a/94a3b8?text=Sepatu+Lari",
+                description: "Sepatu lari yang ringan dan nyaman untuk performa maksimal."
+            },
+            {
+                id: 3,
+                name: "Jam Tangan Klasik",
+                price: "Rp 600.000",
+                image: "https://placehold.co/400x400/1f2937/d1d5db?text=Jam+Tangan",
+                description: "Jam tangan analog dengan sentuhan klasik dan tali kulit asli."
+            },
+            {
+                id: 4,
+                name: "Kemeja Kasual Pria",
+                price: "Rp 215.000",
+                image: "https://placehold.co/400x400/1a202c/a0aec0?text=Kemeja+Pria",
+                description: "Kemeja katun premium dengan potongan slim fit."
+            },
+            {
+                id: 5,
+                name: "Headphone Nirkabel",
+                price: "Rp 1.200.000",
+                image: "https://placehold.co/400x400/2d3748/e2e8f0?text=Headphone",
+                description: "Audio jernih dengan fitur noise-cancelling untuk pengalaman mendengarkan yang imersif."
+            },
+            {
+                id: 6,
+                name: "Jaket Bomber Wanita",
+                price: "Rp 450.000",
+                image: "https://placehold.co/400x400/2c3e50/ecf0f1?text=Jaket+Wanita",
+                description: "Jaket bomber stylish yang cocok untuk segala cuaca."
+            },
+            {
+                id: 7,
+                name: "Celana Jeans Slim Fit",
+                price: "Rp 320.000",
+                image: "https://placehold.co/400x400/34495e/bdc3c7?text=Celana+Jeans",
+                description: "Celana jeans denim stretch yang nyaman dan modern."
+            },
+            {
+                id: 8,
+                name: "Topi Baseball Vintage",
+                price: "Rp 150.000",
+                image: "https://placehold.co/400x400/9b59b6/f1c40f?text=Topi",
+                description: "Topi baseball dengan desain vintage yang klasik dan abadi."
+            }
+        ];
+
+        // Get the product grid container element
+        const productGrid = document.getElementById('product-grid');
+        
+        // Modal elements
+        const successModal = document.getElementById('success-modal');
+        const modalText = document.getElementById('modal-text');
+
+        // Function to create a product card element
+        function createProductCard(product) {
+            const card = document.createElement('div');
+            card.className = 'product-card bg-white rounded-2xl shadow-lg overflow-hidden';
+            card.innerHTML = `
+                <img src="${product.image}" alt="Gambar ${product.name}" class="w-full h-48 object-cover">
+                <div class="p-6 text-center">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">${product.name}</h3>
+                    <p class="text-gray-500 text-sm mb-4">${product.description}</p>
+                    <p class="text-2xl font-bold text-gray-800 mb-4">${product.price}</p>
+                    <button onclick="addToCart('${product.name}')" class="bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg hover:bg-blue-500 transition duration-300 w-full shadow-md">
+                        Tambah ke Keranjang
+                    </button>
+                </div>
+            `;
+            return card;
+        }
+
+        // Function to render all products
+        function renderProducts() {
+            products.forEach(product => {
+                const card = createProductCard(product);
+                productGrid.appendChild(card);
+            });
+        }
+
+        // Function to show the modal
+        function showModal(message) {
+            modalText.textContent = message;
+            successModal.classList.remove('opacity-0', 'pointer-events-none');
+            successModal.classList.add('opacity-100');
+            successModal.querySelector('.modal').classList.add('open');
+        }
+
+        // Function to close the modal
+        function closeModal() {
+            successModal.classList.remove('opacity-100');
+            successModal.classList.add('opacity-0', 'pointer-events-none');
+            successModal.querySelector('.modal').classList.remove('open');
+        }
+
+        // Function to handle "Add to Cart" button click
+        function addToCart(productName) {
+            showModal(`'${productName}' telah ditambahkan ke keranjang Anda.`);
+        }
+
+        // Render products when the page loads
+        document.addEventListener('DOMContentLoaded', renderProducts);
+    </script>
+
+</body>
+</html>
